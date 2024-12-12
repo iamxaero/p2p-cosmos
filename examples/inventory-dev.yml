@@ -1,0 +1,31 @@
+---
+# yamllint disable rule:line-length
+all:
+  vars:
+    chain_home_clear: true
+    chain_version: v21.0.1
+    block_sync: false
+    api_enabled: true
+    chain_id: "my-devnet"
+    chain_use_ssl_proxy: true
+    chain_api_host: "rest"
+    chain_rpc_host: "rpc"
+    chain_grpc_host: "grpc"
+    chain_p2p_host: "p2p"
+    letsencrypt_email: "validator@devnet.com"
+    enable_swap: false
+    swap_size: 8192
+    monitoring_prometheus: true
+    grafana_ssh_url: root@monitor.devnet.com
+    reboot: false
+    go_version: "1.21.1"
+  children:
+    node:
+      hosts:
+        "{{ target }}":
+          ansible_user: root
+          chain_create_validator: true
+          chain_airdrop: true
+          chain_airdrop_accounts:
+            - cosmos1r5v5srda7xfth3hn2s26txvrcrntldjumt8mhl
+            - cosmos1ay4dpm0kjmvtpug28vgw5w32yyjxa5sp97pjqq
