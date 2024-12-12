@@ -1,0 +1,28 @@
+---
+# - name: ensure sudoers config is up to date
+#   template:
+#     src: sudoers.j2
+#     dest: /etc/sudoers
+#     mode: 0440
+#     owner: root
+#     group: root
+#     validate: 'visudo -cf %s'
+
+- name: create sudoers
+  template:
+    src: custom_priv_file.j2
+    dest: '/etc/sudoers.d/{{ sudo_filename }}'
+    mode: 0440
+    owner: root
+    group: root
+    validate: "/usr/sbin/visudo -cf %s"
+  when: not sudo_remove and sudo_filename
+  tags:
+    - sudoers
+    - sudoers_create
+
+  # - name: remove sudoers
+  #   file:
+  #     path: "/etc/sudoers.d/{{ sudo_filename }}"
+  #     state: absent
+  #   when: sudo_remove and sudo_filename

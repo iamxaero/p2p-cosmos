@@ -1,0 +1,20 @@
+---
+users_root_group:
+  - "{%- if ansible_distribution|lower == 'centos' -%} wheel {%- else -%} sudo {%- endif -%}"
+# group_vars/all/users it's this
+users_common_group:
+  - users
+users_default_shell: /bin/bash
+
+users_default_userdb:
+  default_automate_user:
+    pass: "default_user_and_ansible_vault"
+    comment: sre account
+    state: present
+
+users_default_user_list:
+  - default_automate_user
+
+users_userdb: '{{ global_users_userdb | default(users_default_userdb, True) }}'
+users_user_list: '{{ global_users_user_list | default(users_default_user_list, True) }}'
+users_group_list: '{{ global_users_group_list | default(users_common_group, True) }}'

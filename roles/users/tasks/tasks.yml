@@ -1,0 +1,37 @@
+---
+- name: Create user specific groups
+  group:
+    name: "{{ item | lower }}"
+  loop: "{{ users_user_list }}"
+
+- name: Create additional groups
+  group:
+    name: "{{ item | lower }}"
+  loop: "{{ users_group_list }}"
+  when: users_user_list is defined
+
+- name: Create local users
+  user:
+    name: "{{ item | lower }}"
+    shell: "{{ users_userdb[item].shell | default(users_default_shell) }}"
+    append: true
+    group: "{{ item | lower }}"
+    password: "{{ users_userdb[item].pass | default(omit) }}"
+    expires: "{{ users_userdb[item].expires | default(omit) }}"
+    groups: "{{ users_group_list | join(',') | lower }}"
+    comment: "{{ users_userdb[item].comment }}"
+    state: "{{ users_userdb[item].state | default('present') }}"
+  loop: "{{ users_user_list }}"
+  when:
+    - users_user_list is defined
+    - not ansible_check_mode
+
+# - name: Deploy authorized keys for users
+#   authorized_key:
+#     user: "{{ item | lower }}"
+#     key: "{{ users_userdb[item].authorized | default(users_gitlab_url + '/' + item | lower + '.keys' ) }}"
+#     validate_certs: false
+#   loop: "{{ users_user_list }}"
+#   when:
+#     - users_userdb[item].state is undefined or users_userdb[item].state != 'absent'
+#     - not ansible_check_mode

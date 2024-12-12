@@ -1,0 +1,18 @@
+---
+sudo_linting:
+  variables:
+    role_name: sudo
+  rules:
+    - changes:
+        - roles/sudo/**/**/**/*
+  extends: .lint_role
+
+sudo_testing:
+  variables:
+    role_name: sudo
+  rules:
+    - changes:
+        - roles/sudo/**/**/**/*
+  extends: .test_role
+  needs:
+    - "sudo_linting"

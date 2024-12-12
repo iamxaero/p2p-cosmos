@@ -22,7 +22,11 @@ all:
   children:
     node:
       hosts:
-        "{{ target }}":
+        srv01:
+          ansible_host: 138.2.163.27
+          ansible_user: admin
+          ansible_password: ho1oNgohcuRoux7
+          ansible_sudo_pass: ho1oNgohcuRoux7
           fast_sync: true
           statesync_enabled: true
           statesync_rpc_servers: 'http://rpc.state-sync-01.theta-testnet.polypore.xyz:26657,http://rpc.state-sync-02.theta-testnet.polypore.xyz:26657'

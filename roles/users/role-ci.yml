@@ -1,0 +1,18 @@
+---
+users_linting:
+  variables:
+    role_name: users
+  rules:
+    - changes:
+        - roles/users/**/**/**/*
+  extends: .lint_role
+
+users_testing:
+  variables:
+    role_name: users
+  rules:
+    - changes:
+        - roles/users/**/**/**/*
+  extends: .test_role
+  needs:
+    - "users_linting"

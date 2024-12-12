@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+
+{% for host, v in sudo_sudoers.custom_privileges.hosts.items() %}
+{%     if host == inventory_hostname  or  inventory_hostname in groups.get(host, []) %}
+{%          for user, permitions in v.get('users', {}).items() %}
+{{ user }} ALL=(ALL) {{ permitions | join(', ') }}
+{%          endfor %}
+{%          for usergroup, permitions in v.get('usergroups', {}).items() %}
+%{{ usergroup }} ALL=(ALL) {{ permitions | join(', ') }}
+{%          endfor %}
+{%     endif %}
+{% endfor %}

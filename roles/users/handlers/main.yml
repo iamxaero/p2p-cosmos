@@ -1,0 +1,8 @@
+---
+
+- name: reload ssh
+  become: true
+  systemd:
+    name: sshd
+    state: reloaded
+  when: no_reload is not defined

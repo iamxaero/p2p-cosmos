@@ -1,0 +1,23 @@
+---
+
+# list devops
+global_devops_team:
+  - default_automate_user
+
+
+global_users_userdb:
+  default_automate_user:
+    pass: $6$rounds=656000$.E8p3uWuXu4qMvwC$QGg24Ydb728aJNVMf5/Ug7jGFYSqo2DoLKRBcYNlSPNu/2cLDwJ9wgDv981XJJ7nRmotzcJldqSivKdCbre/T/
+    comment: Vladimir Kuznetsov
+    state: present
+    email: 'iamxaero@gmail.com'
+
+
+global_sudo_sudoers:
+  custom_privileges:
+    hosts:  # hosts or usergroup
+      node:  # server groupname
+        users:
+          default_automate_user:
+            - "NOPASSWD: ALL"
+            - "NOPASSWD: /bin/ls *"

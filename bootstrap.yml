@@ -1,0 +1,21 @@
+---
+- name: bootstrap VM
+  hosts:
+    - node:!no_bootstrap
+  become: true
+  gather_facts: true
+  vars_files:
+    - vault/vault.yml
+  vars:
+    global_users_user_list: "{{ global_devops_team }}"
+    global_users_group_list: "{{ users_root_group }}"
+    sysctl_parameters: "{{ global_bootstrap_sysctl_parameters }}"
+  roles:
+    - name: users
+      tags:
+        - users
+
+    - name: sudo
+      tags:
+        - users
+        - sudo

@@ -1,0 +1,26 @@
+---
+
+sudo_root_group: "{%- if ansible_distribution|lower == 'centos' -%} wheel {%- else -%} sudo {%- endif -%}"
+sudo_filename: "custom_privileges"
+sudo_remove: false
+
+sudo_default_sudoers:
+  custom_privileges:
+    hosts:  # hosts or usergroup
+      test_server_group1:  # server groupname
+        users:
+          test_server_user1:
+            - "NOPASSWD: ALL"
+      test_server_group2:
+        users:
+          test_server_user2:
+            - "NOPASSWD: ALL"
+        usergroups:
+          test_team2:  # usergroup, create a head
+            - "NOPASSWD: /bin/ls *"
+      test_server_group3:
+        usergroups:
+          test_team3:  # usergroup, create a head
+            - "NOPASSWD: /bin/ls *"
+
+sudo_sudoers: '{{ global_sudo_sudoers | default(sudo_default_sudoers, True) }}'

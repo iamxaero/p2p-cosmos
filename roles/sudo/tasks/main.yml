@@ -1,0 +1,6 @@
+---
+- name: Include main tasks
+  include_tasks: tasks.yml
+
+- name: Include assertions
+  include_tasks: asserts.yml
