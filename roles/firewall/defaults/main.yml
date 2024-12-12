@@ -1,0 +1,7 @@
+---
+allow_ports:
+  - 22   # SSH
+  - 80   # HTTP
+  - 443  # HTTPS
+  - 8080 # exporter
+default_policy: "allow"  # Default policy (deny or allow)

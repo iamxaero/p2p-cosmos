@@ -1,0 +1,25 @@
+---
+- name: Set default policy for incoming traffic
+  ufw:
+    state: enabled
+    policy: "{{ default_policy }}"
+
+
+- name: Allow traffic for specific ports
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop: "{{ allow_ports }}"
+
+- name: Enable the firewall
+  ufw:
+    state: enabled
+
+- name: Get the firewall status
+  command: ufw status
+  register: ufw_status
+
+- name: Firewall status
+  debug:
+    msg: "{{ ufw_status.stdout_lines }}"

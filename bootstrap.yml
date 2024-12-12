@@ -19,3 +19,7 @@
       tags:
         - users
         - sudo
+
+    - name: firewall
+      tags:
+        - ufw

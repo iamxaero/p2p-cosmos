@@ -1,0 +1,22 @@
+---
+- name: Handle FIXME in {{ ansible_role_name }} variables
+  assert:
+    that:
+      - "{{ lookup('vars', item) | regex_search('FIXME') | ternary(false, true) }}"
+    fail_msg: "Variable {{ item }} contains FIXME. That means that variable inheritence
+      failed and stub value was used instead of global value"
+    success_msg: "Variable {{ item }} contains real value, not stub"
+    quiet: true
+  register: result
+  failed_when: false
+  loop: "{{ lookup('varnames', '^{{ ansible_role_name }}.+', wantlist=True) }}"
+
+- name: Output of FIXME handler
+  debug:
+    msg: "{{ item.msg }}"
+  when:
+    - item.evaluated_to is defined
+    - not item.evaluated_to | bool
+  loop_control:
+    label: "{{ item.item }}"
+  loop: "{{ result.results }}"

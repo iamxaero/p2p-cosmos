@@ -50,4 +50,4 @@ GPLv3
 Author Information
 ------------------
 
-Kuznetsov Vladimir WX768954 <kuznetsov.vladimir@huawei.com>
+Kuznetsov Vladimir <iamxaero@gmail.com>
