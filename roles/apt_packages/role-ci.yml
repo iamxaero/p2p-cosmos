@@ -1,0 +1,18 @@
+---
+apt_packages_linting:
+  variables:
+    role_name: apt_packages
+  rules:
+    - changes:
+        - roles/apt_packages/**/**/**/*
+  extends: .lint_role
+
+apt_packages_testing:
+  variables:
+    role_name: apt_packages
+  rules:
+    - changes:
+        - roles/apt_packages/**/**/**/*
+  extends: .test_role
+  needs:
+    - "apt_packages_linting"

@@ -11,6 +11,7 @@ global_users_userdb:
     comment: Vladimir Kuznetsov
     state: present
     email: 'iamxaero@gmail.com'
+    authorized: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCbxZ9RRWzcYeafqr0M2MsuCf9AMEup/Jex2fV8dqYqRCJyMDYVihU5/w0YvxL7X0zMX/IL4yD8uE/oNsmTk7NsF2N51dBRJ5S23McwxcaTpldPsGVJszygNoUL7yWA6Qxst91Gr8iY/q5von5fKaZdu1U0IxsMzZLRt9orqhBY535cdZpFuPqCkL11S7LVM+2gJImlfsajjIuJdBAH/Er3eHZNiNmYNM+NbQpRNkg9d6cfFBqVZ3skTH7VGHK9VlssU0qKXMRXE2QG1Ed2ipWh/3PKYnketVg0KUUwHcIVPjM/HyByQONTY8aQJKLt5+jDDoc6klyfzmUebZtqQRbJd6N4YTIRiJaMhOQE2d9QMebNHN+79wi2W9LXeVaVTJE9iNvkbCsS69Kx5gzayJ1QYWVbdDFtuppDSV9FdoYYj6F/fof1tBTSU5J7YQnuYOEHI2Z20aY3pkwWnlQX8HkuAEtg4vdGPm797A/85gD8yIej3iR/4hv6EcW8M5FGn8k= xaero@prepos.local
 
 
 global_sudo_sudoers:

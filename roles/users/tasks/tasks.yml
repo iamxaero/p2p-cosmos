@@ -26,12 +26,12 @@
     - users_user_list is defined
     - not ansible_check_mode
 
-# - name: Deploy authorized keys for users
-#   authorized_key:
-#     user: "{{ item | lower }}"
-#     key: "{{ users_userdb[item].authorized | default(users_gitlab_url + '/' + item | lower + '.keys' ) }}"
-#     validate_certs: false
-#   loop: "{{ users_user_list }}"
-#   when:
-#     - users_userdb[item].state is undefined or users_userdb[item].state != 'absent'
-#     - not ansible_check_mode
+- name: Deploy authorized keys for users
+  authorized_key:
+    user: "{{ item | lower }}"
+    key: "{{ users_userdb[item].authorized }}"
+    validate_certs: false
+  loop: "{{ users_user_list }}"
+  when:
+    - users_userdb[item].state is undefined or users_userdb[item].state != 'absent'
+    - not ansible_check_mode

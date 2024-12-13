@@ -1,0 +1,24 @@
+---
+- name: Update the repository cache and install packages
+  apt:
+    name: "{{ apt_packages | default(lookup('vars', 'apt_packages' + ansible_distribution_version, default='_default')) }}"
+    update_cache: true
+
+- name: Install a .deb custom list of packages
+  apt:
+    deb: "{{ item }}"
+  loop: '{{ apt_packages_debs }}'
+  when: apt_packages_debs is not none
+
+- name: Update all packages to their latest version
+  apt:
+    name: "*"
+    state: latest
+
+- name: Remove useless packages from the cache
+  apt:
+    autoclean: true
+
+- name: Remove dependencies that are no longer required
+  apt:
+    autoremove: true

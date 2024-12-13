@@ -23,3 +23,6 @@
     - name: firewall
       tags:
         - ufw
+
+
+    - name: apt_packages

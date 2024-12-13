@@ -1,0 +1,17 @@
+---
+apt_packages_default:
+  - apt-transport-https
+  - sudo
+  - tzdata
+  - unzip
+  - curl
+
+apt_packages22.04:
+  - apt-transport-https
+  - sudo
+  - tzdata
+  - unzip
+  - curl
+  - wget=1.21*
+
+apt_packages_debs: []
