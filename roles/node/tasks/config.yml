@@ -38,11 +38,42 @@
   when: chain_binary_name == "gaiad" and node_unsafe_reset and ((major_version|int == 7 and minor_version|int == 0 and patch_version|int >= 1) or (major_version|int == 7 and minor_version|int >= 1) or major_version|int > 7)
   shell: |
     cd $HOME
-    {{chain_bin}} tendermint unsafe-reset-all --home {{chain_home}}
+    {{chain_bin}} tendermint unsafe-reset-all
   become_user: "{{node_user}}"
   tags:
     - chain_reset
 
+# Get trust height automatically
+- name: obtain trust height
+  when: statesync_enabled and statesync_auto_populate
+  script:
+    get_trust_height.sh {{ sync_rpc_servers.split(',')[0] }}
+  register: trust_height
+  tags:
+    - trust
+
+- name: obtain trust height block hash ID
+  when: statesync_enabled and statesync_auto_populate
+  script:
+    get_trust_hash.sh {{ sync_rpc_servers.split(',')[0] }} {{ trust_height.stdout }}
+  register: trust_hash
+  tags:
+    - trust
+
+- name: print trust height and hash ID
+  when: statesync_enabled and statesync_auto_populate
+  debug:
+    msg: 'Height {{trust_height.stdout }} has hash ID {{ trust_hash.stdout }}'
+  become_user: "{{node_user}}"
+  tags:
+    - trust
+- name: set state sync variables
+  when: statesync_enabled and statesync_auto_populate
+  set_fact:
+    statesync_trust_height: "{{ trust_height.stdout }}"
+    statesync_trust_hash: "{{ trust_hash.stdout }}"
+  tags:
+    - trust
 # Config file generation
 - name: copy app.toml
   when: app_toml_file is defined
@@ -464,31 +495,6 @@
     rsync_opts:
       - "--chown={{ node_user }}:{{ node_user }}"
   delegate_to: "{{ genesis_node }}"
-
-# Get trust height automatically
-- name: obtain trust height
-  when: statesync_enabled and statesync_auto_populate
-  script:
-    get_trust_height.sh {{ statesync_rpc_servers.split(',')[0] }}
-  register: trust_height
-
-- name: obtain trust height block hash ID
-  when: statesync_enabled and statesync_auto_populate
-  script:
-    get_trust_hash.sh {{ statesync_rpc_servers.split(',')[0] }} {{ trust_height.stdout }}
-  register: trust_hash
-
-- name: print trust height and hash ID
-  when: statesync_enabled and statesync_auto_populate
-  debug:
-    msg: 'Height {{trust_height.stdout }} has hash ID {{ trust_hash.stdout }}'
-  become_user: "{{node_user}}"
-
-- name: set state sync variables
-  when: statesync_enabled and statesync_auto_populate
-  set_fact:
-    statesync_trust_height: "{{ trust_height.stdout }}"
-    statesync_trust_hash: "{{ trust_hash.stdout }}"
 
 ## Addressbook config
 - name: copy addrbook.json
