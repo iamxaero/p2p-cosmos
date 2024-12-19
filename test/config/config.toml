@@ -80,8 +80,8 @@ ttl-num-blocks = 0
 [statesync]
 enable = true
 rpc_servers = "https://rpc.provider-state-sync-01.ics-testnet.polypore.xyz:443,https://rpc.provider-state-sync-02.ics-testnet.polypore.xyz:443"
-trust_height = 9618693
-trust_hash = "46179CCC5956E31EC2D1E34106639A6EB9B35EA329CD4DDC6597FFDF242DCF57"
+trust_height = 9658415
+trust_hash = "C142C8E81B6196F991BBC90FCF8302D81EDD74F769557833673AF46763274393"
 trust_period = "8h0m0s"
 discovery_time = "15s"
 temp_dir = ""

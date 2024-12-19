@@ -167,7 +167,7 @@ mempool_ttl_num_blocks: 0
 statesync_enabled: false
 statesync_rpc_servers: ''
 statesync_trust_height: ''
-statesync_trust_hash: '91870bfb8671f5d60c303f9da8e44b620a5403f913359cc6b212150bfc3e631d'
+statesync_trust_hash: ''
 statesync_trust_period: 168h0m0s
 statesync_discovery_time: 15s
 statesync_chunk_request_timeout: 10s

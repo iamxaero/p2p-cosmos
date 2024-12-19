@@ -1,0 +1,15 @@
+gitlab:
+  url: {{ exporters_pipelines_gitlab_url }}
+  # You can also configure the token using --gitlab-token
+  # or the $GCPE_GITLAB_TOKEN environment variable
+  token: {{ exporters_pipelines_token }}
+  disable_tls_verify: {{ exporters_pipelines_disable_tls_verify }}
+defaults:
+    fetch_pipeline_job_metrics: {{ exporters_pipelines_fetch_pipeline_job_metrics }}
+    fetch_pipeline_variables: {{ exporters_pipelines_fetch_pipeline_variables }}
+    fetch_merge_request_pipelines_refs: {{ exporters_pipelines_fetch_merge_request_pipelines_refs }}
+projects:
+{% for project in exporters_pipelines_projects %}
+  - name: {{ project.name }}
+    refs_regexp: {{ project.refs_regexp | default("^master$") }}
+{% endfor %}

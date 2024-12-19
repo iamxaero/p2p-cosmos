@@ -1,0 +1,90 @@
+---
+- name: Create the exporters group
+  group:
+    name: '{{ exporters_system_group }}'
+    state: present
+    system: true
+  when: exporters_system_group != 'root'
+
+- name: Create the exporters user
+  user:
+    name: '{{ exporters_system_user }}'
+    groups: '{{ exporters_system_group }}'
+    append: true
+    shell: /usr/sbin/nologin
+    system: true
+    createhome: false
+    home: /
+  when: exporters_system_user != 'root'
+
+- name: "Create /opt/exporters/ subdirs"
+  file:
+    dest: "{{ exporters_linux_bin_dir }}/{{ '.'.join((item.name, item.version)) }}"
+    state: directory
+    owner: '{{ exporters_system_user }}'
+    group: '{{ exporters_system_group }}'
+    mode: '0755'
+
+- name: Download exporters binary
+  get_url:
+    url: "{{ exporters_mirror }}/{{ '.'.join((item.name, item.version)) }}"
+    dest: "{{ exporters_linux_bin_dir }}/{{ '.'.join((item.name, item.version)) }}/{{ item.name }}"
+    owner: '{{ exporters_system_user }}'
+    group: '{{ exporters_system_group }}'
+    mode: '0755'
+  environment:
+    http_proxy: ''
+    https_proxy: ''
+  check_mode: false
+
+- name: Creates /usr/local/bin symlinks
+  file:
+    src: "{{ exporters_linux_bin_dir }}/{{ '.'.join((item.name, item.version)) }}/{{ item.name }}"
+    dest: "/usr/local/bin/{{ item.name }}"
+    state: link
+  register: link
+  notify: "restart exporter"
+
+- name: "Copy systemd service file"
+  template:
+    src: "templates/systemd/{{ item.name }}.service.j2"
+    dest: "/etc/systemd/system/{{ item.name }}.service"
+    owner: root
+    group: root
+    mode: 'a+x'
+  register: unit
+  notify: "restart exporter"
+
+- name: "Copy exporter configs"
+  template:
+    src: "templates/config/{{ item.name }}.yml.j2"
+    dest: "{{ exporters_linux_bin_dir }}/{{ '.'.join((item.name, item.version)) }}/{{ item.name }}.yml"
+    owner: '{{ exporters_system_user }}'
+    group: '{{ exporters_system_group }}'
+    mode: '0755'
+  when: item.file_config
+  register: conf
+  check_mode: false
+  notify: "restart exporter"
+
+- name: Create textfile collector dir
+  file:
+    path: '{{ exporters_linux_textfile_dir }}'
+    state: directory
+    owner: '{{ exporters_system_user }}'
+    group: '{{ exporters_system_group }}'
+    recurse: true
+    mode: 0775
+  when: exporters_linux_textfile_dir is defined
+  check_mode: false
+
+- name: Set fact with exporters to restart
+  set_fact:
+    exporter_list: "{{ (exporter_list|default({}))|combine(
+      {
+        item.name: 'true'
+      }
+    ) }}"
+  when: unit.changed or link.changed or conf.changed
+  tags:
+    - skip_ansible_lint

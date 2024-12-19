@@ -1,0 +1,12 @@
+[Unit]
+Description=GitLab CI Pipelines Exporter Server
+
+[Service]
+User={{ exporters_system_user }}
+Group={{ exporters_system_group }}
+ExecStart=/usr/local/bin/{{ item.name }} \
+    --listen-address "{{ item.port }}" \
+    --config "{{ exporters_linux_bin_dir }}/{{ '.'.join((item.name, item.version)) }}/{{ item.name }}.yml"
+
+[Install]
+WantedBy=multi-user.target

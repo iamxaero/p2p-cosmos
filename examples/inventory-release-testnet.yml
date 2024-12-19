@@ -42,5 +42,5 @@ all:
           #                       3763
           fast_sync: true
           statesync_enabled: true
-          statesync_rpc_servers: 'https://provider-state-sync-01.ics-testnet.polypore.xyz:443,https://provider-state-sync-02.ics-testnet.polypore.xyz:443'
+          statesync_rpc_servers: 'https://rpc.provider-sentry-01.ics-testnet.polypore.xyz,https://rpc.provider-sentry-02.ics-testnet.polypore.xyz,https://rpc-rs.cosmos.nodestake.top,https://cosmos-testnet-rpc.itrocket.net'
           sync_rpc_servers: 'https://rpc.provider-state-sync-01.ics-testnet.polypore.xyz:443,https://rpc.provider-state-sync-02.ics-testnet.polypore.xyz:443'

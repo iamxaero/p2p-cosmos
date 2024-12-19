@@ -1,0 +1,10 @@
+---
+- name: Install binary-distributed exporters
+  include_tasks: binary.yml
+  loop: "{{ exporters_linux_spec }}"
+  loop_control:
+    label: '{{ item.name }}'
+  when: item.name in exporters_install_list and item.type == 'bin'
+
+- name: Include assertions
+  include_tasks: asserts.yml

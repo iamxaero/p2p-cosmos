@@ -1,0 +1,44 @@
+---
+- name: "Create /opt/exporters/ subdirs"
+  file:
+    dest: "{{ exporters_linux_bin_dir }}/{{ item.name }}"
+    state: directory
+    owner: '{{ exporters_system_user }}'
+    group: '{{ exporters_system_group }}'
+    mode: '0755'
+  when: item.file_config
+
+- name: "Copy exporter configs"
+  template:
+    src: "templates/config/{{ item.name }}.yml.j2"
+    dest: "{{ exporters_linux_bin_dir }}/{{ item.name }}/{{ item.name }}.yml"
+    owner: '{{ exporters_system_user }}'
+    group: '{{ exporters_system_group }}'
+    mode: '0755'
+  when: item.file_config
+
+- name: Deploy docker based exporter
+  docker_container:
+    name: "{{ item.name }}"
+    image: "{{ item.image }}"
+    command: "{{ item.command | default(omit) }}"
+    entrypoint: "{{ item.value.entrypoint | default(omit) }}"
+    state: "{{ item.state | default('started') }}"
+    ports: "{{ item.ports | default(omit) }}"
+    exposed_ports: "{{ item.exposed_ports | default(omit) }}"
+    links: "{{ item.links | default(omit) }}"
+    user: "{{ item.user | default(omit) }}"
+    devices: "{{ item.devices | default(omit) }}"
+    networks: "{{ item.networks | default(omit) }}"
+    network_mode: "{{  item.network_mode | default(omit) }}"
+    volumes: "{{ item.volumes | default(omit) }}"
+    volumes_from: "{{ item.volumes_from | default(omit) }}"
+    env: "{{ item.env | default(omit) }}"
+    env_file: "{{ item.env_file | default(omit) }}"
+    pull: "{{ item.pull | default(omit) }}"
+    restart_policy: "{{ item.restart_policy | default('always') }}"
+    working_dir: "{{ item.working_dir | default(omit) }}"
+    labels: "{{ item.labels | default(omit) }}"
+    recreate: "{{ item.recreate | default('true') }}"
+    healthcheck: "{{ item.healthcheck | default(omit) }}"
+    shm_size: "{{ item.shm_size | default(omit) }}"

@@ -1,4 +1,4 @@
-minimum-gas-prices = "0.0025uatom"
+minimum-gas-prices = "0.005uatom"
 query-gas-limit = "0"
 pruning = "default"
 pruning-keep-recent = "0"

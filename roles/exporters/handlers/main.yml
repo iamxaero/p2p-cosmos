@@ -1,0 +1,8 @@
+---
+- name: "restart exporter"
+  systemd:
+    daemon_reload: true
+    name: "{{ item.key }}"
+    state: restarted
+    enabled: true
+  loop: '{{ exporter_list|dict2items }}'
