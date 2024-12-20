@@ -1,0 +1,12 @@
+[Unit]
+Description=Prometheus Gaia Exporter Server
+
+[Service]
+User={{ exporters_system_user }}
+Group={{ exporters_system_group }}
+ExecStart=/opt/exporters/gaia-exporter.1.0.0/gaia-exporter/{{ item.name }} \
+    -web.listen-address ":{{ item.port }}" \
+    -bind.stats-url "http://{{ inventory_hostname }}:{{ item.port }}"
+
+[Install]
+WantedBy=multi-user.target

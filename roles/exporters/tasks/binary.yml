@@ -26,20 +26,17 @@
     mode: '0755'
 
 - name: Download exporters binary
-  get_url:
-    url: "{{ exporters_mirror }}/{{ '.'.join((item.name, item.version)) }}"
+  copy:
+    src: "gaia-exporter"
     dest: "{{ exporters_linux_bin_dir }}/{{ '.'.join((item.name, item.version)) }}/{{ item.name }}"
     owner: '{{ exporters_system_user }}'
     group: '{{ exporters_system_group }}'
     mode: '0755'
-  environment:
-    http_proxy: ''
-    https_proxy: ''
   check_mode: false
 
 - name: Creates /usr/local/bin symlinks
   file:
-    src: "{{ exporters_linux_bin_dir }}/{{ '.'.join((item.name, item.version)) }}/{{ item.name }}"
+    src: "{{ exporters_linux_bin_dir }}/{{ '.'.join((item.name, item.version)) }}/{{ item.name }}/gaia-exporter"
     dest: "/usr/local/bin/{{ item.name }}"
     state: link
   register: link
@@ -58,7 +55,7 @@
 - name: "Copy exporter configs"
   template:
     src: "templates/config/{{ item.name }}.yml.j2"
-    dest: "{{ exporters_linux_bin_dir }}/{{ '.'.join((item.name, item.version)) }}/{{ item.name }}.yml"
+    dest: "{{ exporters_linux_bin_dir }}/{{ '.'.join((item.name, item.version)) }}/{{ item.name }}/config.yaml"
     owner: '{{ exporters_system_user }}'
     group: '{{ exporters_system_group }}'
     mode: '0755'
