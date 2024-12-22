@@ -4,4 +4,9 @@ allow_ports:
   - 80   # HTTP
   - 443  # HTTPS
   - 8080 # exporter
-default_policy: "allow"  # Default policy (deny or allow)
+  - 6060 # gaia
+  - 53   # DNS
+  - 9090 # gaia
+  - 26657 # gaia
+  - 26656 # gaia
+default_policy: "deny"  # Default policy (deny or allow)
